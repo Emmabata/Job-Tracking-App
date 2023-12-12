@@ -1,14 +1,28 @@
 import { Link, useRouteError } from "react-router-dom";
+import Wrapper from "../assets/wrappers/ErrorPage";
+import img from '../assets/images/404.svg';
+
 
 const Error = () => {
     const error = useRouteError();
     console.log(error)
+
+    if(error.status === 404){
+        return <Wrapper>
+            <div>
+                <img src={img} alt="404-img" />
+                <h3>Ohh! page not found</h3>
+                <p>We can't seem to find the page you are looking for...</p>
+                <Link to="/dashboard">back to dashbaord</Link>
+            </div>
+        </Wrapper>
+    }
     return ( 
-        <div>
-            <h1>Error Page
-            <Link to="/">Back home</Link>
-            </h1>
-        </div>
+        <Wrapper>
+            <div>
+                <h3>Something went wrong</h3>
+            </div>
+        </Wrapper>
     );
 }
 

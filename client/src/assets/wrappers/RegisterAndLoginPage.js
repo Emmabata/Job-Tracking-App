@@ -13,6 +13,10 @@ const Wrapper = styled.section`
         max-width: 400px;
         border-top: 5px solid var(--primary-500);
     }
+    .form-label{
+        text-align: start;
+        font-weight: 700;
+    }
     h4 {
         text-align: center;
         margin-bottom: 1.38rem;
@@ -21,6 +25,7 @@ const Wrapper = styled.section`
         margin-top: 1rem;
         text-align: center;
         line-height: 1.5;
+        font-weight: 1rem;
     }
     .btn {
         margin-top: 1rem;
