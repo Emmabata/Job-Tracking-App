@@ -1,8 +1,57 @@
+import { Outlet } from "react-router-dom";
+import Wrapper from '../assets/wrappers/Dashboard';
+import { BigSidebar, Navbar, SmallSidebar } from "../Components";
+import { createContext,useContext, useState } from "react";
 
-const DashboardLayout = () => {
+const DashboardContext = createContext();
+
+const DashboardLayout = ({setIsDarkThemeEnabled}) => {
+    //temp
+    const user = {name: "Bata"}
+    const [showSidebar, setShowSidebar] = useState(false)
+    const [isDarkTheme, setIsDarkTheme] = useState(setIsDarkThemeEnabled)
+
+    const toggleDarkTheme = () => {
+        const newDarkTheme = !isDarkTheme;
+        setIsDarkTheme(newDarkTheme);
+        document.body.classList.toggle('dark-theme', newDarkTheme);
+        localStorage.setItem('darkTheme', newDarkTheme)
+    }
+
+    const toggleSidebar = () => {
+        setShowSidebar(!showSidebar)
+    }
+
+    const logoutUser = async () => {
+        console.log("user logged out");
+    }
+
+
     return (
-        <h1>Dashboard</h1>
+        <DashboardContext.Provider value={{
+            user,
+            showSidebar,
+            isDarkTheme,
+            toggleDarkTheme,
+            toggleSidebar,
+            logoutUser,
+        }}>
+        <Wrapper>
+            <main className="dashboard">
+                <SmallSidebar />
+                <BigSidebar />
+                <div>
+                    <Navbar />
+                    <div className="dashboard-page">
+                        <Outlet/>
+                    </div>
+                </div>
+            </main>
+        </Wrapper>
+        </DashboardContext.Provider>
     );
-}
+};
+//A custom hook
+export const useDashboardContext = () => useContext(DashboardContext);
 
 export default DashboardLayout;
