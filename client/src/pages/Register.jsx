@@ -21,7 +21,7 @@ const Register = () => {
                 <FormRow type="password" name="password" defaultValue="BataSecret" />
 
                 <button type="submit" className="btn btn-block">
-                    Submit
+                    <Link to="/login">Submit</Link>
                 </button>
 
                 <p>Already a member?
