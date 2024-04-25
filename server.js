@@ -8,8 +8,19 @@ const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 
+
+
 //Routers
 import jobRouter from './routes/jobRoutes.js'
+
+//middleware
+import errorHandlerMiddleware from './middleware/errorHandlerAndMiddleware.js';
+import { validateTest } from './middleware/validationMiddleware.js';
+
+
+
+
+
 
 const server = http.createServer(app);
 app.use(express.json());
@@ -28,9 +39,15 @@ if (process.env.NODE_ENV === 'development') {
 // });
 //api for all jobs
 
-app.post('/', (req, res) => {
-    console.log(req.body);
-    res.json({ message: "data received", data: req.body });
+
+//input express validation between the url and the callback function in a square bracket
+app.post(
+    '/api/v1/test', 
+    
+    validateTest,
+    (req, res) => {
+    const {name} = req.body;
+    res.json({ message: `hello ${name}`});
 });
 
 app.use('/api/v1/jobs', jobRouter);
@@ -40,10 +57,7 @@ app.use('*', (req, res) => {
 });
 
 //ERROR MIDDLEWARE(It comes last. the request exists)
-app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).json({msg: 'something went wrong'})
-});
+app.use(errorHandlerMiddleware);
 
 
 const port = process.env.PORT || 5100;

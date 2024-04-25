@@ -1,5 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import Job from '../models/jobModel.js';
+import { NotFoundError } from '../errors/customErrors.js';
+
 
 
 //GET ALL JOBS
@@ -26,9 +28,8 @@ export const createJob = async (req, res) => {
 export const getSingleJob = async (req, res) => {
     const {id} = req.params;
     const job = await Job.findById(id);
-    if(!job) {
-        res.status(404).json({msg: `no job with id ${id}`})
-    }
+    //adding a custom middleware to handle 404 error
+    if(!job) throw new NotFoundError(`no job with id ${id}`)
     res.status(StatusCodes.OK).json({ job });
 }
 
@@ -40,9 +41,7 @@ export const updateJob = async (req, res) => {
         //this below updates the new job
         new:true
     })
-    if(!updatedJob) {
-        return res.status(404).json({msg: `no job with id ${id}`})
-    }
+    if(!updatedJob) throw new NotFoundError(`no job with id ${id}`);
     res.status(StatusCodes.OK).json({ msg: `job modified`, job:updatedJob });
 }
 
@@ -50,11 +49,10 @@ export const updateJob = async (req, res) => {
 //delete job controller
 export const deleteJob = async (req, res) => {
     const { id } = req.params;
-    const removedJob = await Job.findByIdAndDelete(id)
-    if(!removedJob) {
-        res.status(404).json({msg: `no job with id ${id}`})
-        return;
-    }
-    res.status(200).json({ msg: 'job deleted', job:removedJob })
+    const removedJob = await Job.findByIdAndDelete(id);
+
+    if(!removedJob) throw new NotFoundError(`no job with id ${id}`);
+
+    res.status(StatusCodes.OK).json({ msg: 'job deleted', job:removedJob })
 }
 
