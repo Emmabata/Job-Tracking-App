@@ -7,50 +7,26 @@ import express from 'express';
 const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-
-
-
 //Routers
-import jobRouter from './routes/jobRoutes.js'
-
+import jobRouter from './routes/jobRouter.js';
+import authRouter from './routes/authRouter.js';
 //middleware
 import errorHandlerMiddleware from './middleware/errorHandlerAndMiddleware.js';
-import { validateTest } from './middleware/validationMiddleware.js';
-
-
-
 
 
 
 const server = http.createServer(app);
 app.use(express.json());
 
-
-
-
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
 
-
-// app.get("/", (req, res) => {
-//     res.send("hello world");
-// });
 //api for all jobs
-
-
-//input express validation between the url and the callback function in a square bracket
-app.post(
-    '/api/v1/test', 
-    
-    validateTest,
-    (req, res) => {
-    const {name} = req.body;
-    res.json({ message: `hello ${name}`});
-});
-
 app.use('/api/v1/jobs', jobRouter);
+app.use('/api/v1/auth', authRouter);
+
 //NOT FOUND MIDDLEWARE(it comes after the routes if they don't match the request or does not exit)
 app.use('*', (req, res) => {
     res.status(404).json({ msg: 'request not found'});
@@ -61,7 +37,6 @@ app.use(errorHandlerMiddleware);
 
 
 const port = process.env.PORT || 5100;
-
 try{
     await mongoose.connect(process.env.MONGODB_URL);
     server.listen(port, () => {
@@ -71,5 +46,3 @@ try{
     console.log(error)
     process.exit(1);
 }
-
-
