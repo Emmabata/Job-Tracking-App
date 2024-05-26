@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import User from '../models/UserModel.js';
-import { hashPassword } from "../utils/passwordUtils.js";
+import { comparePassword, hashPassword } from "../utils/passwordUtils.js";
+import { UnauthenticatedError } from "../errors/customErrors.js";
 
 //Admin User authentication for Register
 export const register = async (req, res) => {
@@ -15,6 +16,13 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    res.send('login');
+//find if the user exits
+    const user = await User.findOne({email: req.body.email});
+//if yes then compare the inputed password with the hashedpassword in the database
+    const isValidUser = user && (await comparePassword(req.body.password, user.password));
+//if not return a 401 custom error
+    if(!isValidUser) throw new UnauthenticatedError('invalid credentials');
+
+    res.send('Login');
 };
 

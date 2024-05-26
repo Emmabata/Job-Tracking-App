@@ -18,7 +18,7 @@ export class BadRequestError extends Error {
     }
 }
 
-//this means the client must authenticate itself before getting response
+//this means the client must authenticate itself before getting response(401)
 export class UnauthenticatedError extends Error {
     constructor(message) {
         super(message);
