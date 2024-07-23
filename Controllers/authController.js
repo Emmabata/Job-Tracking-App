@@ -14,7 +14,10 @@ export const register = async (req, res) => {
 
     const user = await User.create(req.body);
     res.status(StatusCodes.CREATED).json({ msg : 'user created'});
+    console.log(user);
 };
+
+
 
 export const login = async (req, res) => {
 //find if the user exits
@@ -35,3 +38,10 @@ export const login = async (req, res) => {
     res.status(StatusCodes.OK).json({msg:'user logged in'});
 };
 
+export const logout = (req, res) => {
+    res.cookie("token", 'logout', {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+    });
+    res.status(StatusCodes.OK).json({msg: "user logged out!"});
+};

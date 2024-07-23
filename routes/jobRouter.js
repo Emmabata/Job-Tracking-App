@@ -15,7 +15,8 @@ import { validateJobInput, validateIdParam, } from '../middleware/validationMidd
 
 //optional or diff technique mostly for chaining routes
 router.route('/').get(getAllJobs).post(validateJobInput, createJob);
-router.route('/:id')
+router
+    .route('/:id')
     .get(validateIdParam, getSingleJob)
     .patch(validateJobInput, validateIdParam,updateJob)
     .delete(validateIdParam, deleteJob);

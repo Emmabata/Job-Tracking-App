@@ -1,11 +1,13 @@
-import { StatusCodes } from 'http-status-codes';
 import Job from '../models/jobModel.js';
+import { StatusCodes } from 'http-status-codes';
+
 
 
 
 //GET ALL JOBS
 export const getAllJobs = async (req, res) => {
-    const jobs = await Job.find({});
+    console.log(req.user);
+    const jobs = await Job.find({ createdBy: req.user.userId });
     res.status(StatusCodes.OK).json({ jobs });
 }
 
@@ -14,6 +16,7 @@ export const getAllJobs = async (req, res) => {
 //i prefer to use try and catch on the createJob function but use the error middleware on the rest by installing express-async-error package
 export const createJob = async (req, res) => {
     try{
+        req.body.createdBy = req.user.userId;
         const job = await Job.create(req.body);
         res.status(StatusCodes.CREATED).json({job});
     }catch(error) {
