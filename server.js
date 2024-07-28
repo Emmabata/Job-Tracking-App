@@ -28,8 +28,12 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+//testing the route with the frontend
+app.get('/api/v1/test', (req, res) => {
+    res.json({msg: "test route"});
+});
 
-//api for all jobs(private route)
+//api for jobs, users & authorization(private route)
 app.use('/api/v1/jobs', authenticateUser, jobRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
 app.use('/api/v1/auth', authRouter);//public route for login/register
