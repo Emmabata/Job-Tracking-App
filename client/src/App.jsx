@@ -82,11 +82,11 @@ const router = createBrowserRouter([
                 element: <Admin />,
               },
               {
-                path:'edit-Job/:id', 
+                path: "edit-job/:id", 
                 element:<EditJob/>,
-                loader:editJobLoader,
-                action:editJobAction,
-              }
+                loader: editJobLoader,
+                action: editJobAction,
+              },
             ],
         },
       ]

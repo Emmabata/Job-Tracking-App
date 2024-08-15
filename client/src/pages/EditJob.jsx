@@ -1,4 +1,4 @@
-import { Form, redirect, useLoaderData, useNavigation, useParams } from "react-router-dom";
+import { Form, redirect, useLoaderData, useNavigation } from "react-router-dom";
 import Wrapper from "../assets/wrappers/Job";
 import { FormRow, FormRowSelect } from "../Components";
 import { JOB_STATUS, JOB_TYPE } from "../../../utils/constants";
@@ -17,22 +17,27 @@ export const loader = async ({ params }) => {
     }
 };
 
+
+
 export const action = async ({ request, params }) => {
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
+    console.log(data);
     try {
         await customFetch.patch(`/jobs/${params.id}`, data);
         toast.success('job edited successfully');
+        console.log(data);
         return redirect('/dashboard/all-jobs');
     } catch (error) {
         toast.error(error?.response?.data?.msg);
-        return redirect('/dashboard/all-jobs');
+        return redirect(error);
     }
 };
 
+
 const EditJob = () => {
     const { job } = useLoaderData();
-    const navigation = useNavigation();
+    const navigation = useNavigation(); 
     const isSubmitting = navigation.state === "submitting";
     
     return (
